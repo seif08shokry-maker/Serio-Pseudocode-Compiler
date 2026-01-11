@@ -1,0 +1,92 @@
+DECLARE INTEGER Size := 8
+DECLARE ARRAY1D[Size] Numbers := 0
+DECLARE INTEGER i := 1
+DECLARE INTEGER j := 1
+DECLARE INTEGER temp := 0
+DECLARE BOOLEAN swapped := TRUE
+DECLARE INTEGER comparisons := 0
+DECLARE INTEGER swaps := 0
+
+OUTPUT "Enter 8 numbers to sort:"
+
+FOR i := 1 TO Size
+    OUTPUT "Enter number "
+    OUTPUT i
+    OUTPUT ": "
+    INPUT Numbers[i]
+ENDFOR
+
+OUTPUT "Original array:"
+FOR i := 1 TO Size
+    OUTPUT Numbers[i]
+    OUTPUT " "
+ENDFOR
+OUTPUT ""
+
+FOR i := 1 TO Size - 1
+    swapped := FALSE
+    
+    FOR j := 1 TO Size - i
+        comparisons := comparisons + 1
+        
+        IF Numbers[j] > Numbers[j + 1] THEN
+            temp := Numbers[j]
+            Numbers[j] := Numbers[j + 1]
+            Numbers[j + 1] := temp
+            swapped := TRUE
+            swaps := swaps + 1
+        ENDIF
+    ENDFOR
+    
+    IF swapped = FALSE THEN
+        OUTPUT "Array became sorted after "
+        OUTPUT i
+        OUTPUT " passes"
+        i := Size
+    ENDIF
+ENDFOR
+
+OUTPUT "Sorted array:"
+FOR i := 1 TO Size
+    OUTPUT Numbers[i]
+    OUTPUT " "
+ENDFOR
+OUTPUT ""
+
+OUTPUT "Total comparisons: "
+OUTPUT comparisons
+OUTPUT "Total swaps: "
+OUTPUT swaps
+
+OUTPUT "Sorting performance analysis:"
+IF comparisons = 1 THEN
+    OUTPUT "Excellent - minimal comparisons needed"
+ELSE
+    IF comparisons = 2 THEN
+        OUTPUT "Very good sorting efficiency"
+    ELSE
+        IF comparisons = 3 THEN
+            OUTPUT "Good sorting efficiency"
+        ELSE
+            IF comparisons = 4 THEN
+                OUTPUT "Moderate sorting efficiency"
+            ELSE
+                OUTPUT "Standard bubble sort performance"
+            ENDIF
+        ENDIF
+    ENDIF
+ENDIF
+
+IF swaps = 0 THEN
+    OUTPUT "Array was already sorted!"
+ELSE
+    IF swaps < 5 THEN
+        OUTPUT "Array was nearly sorted"
+    ELSE
+        IF swaps > 20 THEN
+            OUTPUT "Array required significant sorting"
+        ELSE
+            OUTPUT "Array had moderate disorder"
+        ENDIF
+    ENDIF
+ENDIF

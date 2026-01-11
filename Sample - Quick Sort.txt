@@ -1,0 +1,153 @@
+DECLARE INTEGER Size := 10
+DECLARE ARRAY1D[Size] Numbers := 0
+DECLARE ARRAY1D[Size] Stack := 0
+DECLARE INTEGER top := 0
+DECLARE INTEGER i := 1
+DECLARE INTEGER j := 1
+DECLARE INTEGER pivot := 0
+DECLARE INTEGER temp := 0
+DECLARE INTEGER low := 1
+DECLARE INTEGER high := 1
+DECLARE INTEGER partitions := 0
+DECLARE INTEGER swaps := 0
+DECLARE INTEGER comparisons := 0
+
+OUTPUT "Enter 10 numbers to sort with Quick Sort:"
+
+FOR i := 1 TO Size
+    OUTPUT "Enter number "
+    OUTPUT i
+    OUTPUT ": "
+    INPUT Numbers[i]
+ENDFOR
+
+OUTPUT "Original array:"
+FOR i := 1 TO Size
+    OUTPUT Numbers[i]
+    OUTPUT " "
+ENDFOR
+OUTPUT ""
+
+top := 1
+Stack[top] := 1
+top := top + 1
+Stack[top] := Size
+
+WHILE top > 0
+    high := Stack[top]
+    top := top - 1
+    low := Stack[top]
+    top := top - 1
+    
+    IF low < high THEN
+        partitions := partitions + 1
+        
+        pivot := Numbers[high]
+        i := low - 1
+        
+        FOR j := low TO high - 1
+            comparisons := comparisons + 1
+            IF Numbers[j] <= pivot THEN
+                i := i + 1
+                IF i != j THEN
+                    temp := Numbers[i]
+                    Numbers[i] := Numbers[j]
+                    Numbers[j] := temp
+                    swaps := swaps + 1
+                ENDIF
+            ENDIF
+        ENDFOR
+        
+        i := i + 1
+        IF i != high THEN
+            temp := Numbers[i]
+            Numbers[i] := Numbers[high]
+            Numbers[high] := temp
+            swaps := swaps + 1
+        ENDIF
+        
+        IF i - 1 > low THEN
+            top := top + 1
+            Stack[top] := low
+            top := top + 1
+            Stack[top] := i - 1
+        ENDIF
+        
+        IF i + 1 < high THEN
+            top := top + 1
+            Stack[top] := i + 1
+            top := top + 1
+            Stack[top] := high
+        ENDIF
+    ENDIF
+ENDWHILE
+
+OUTPUT "Sorted array:"
+FOR i := 1 TO Size
+    OUTPUT Numbers[i]
+    OUTPUT " "
+ENDFOR
+OUTPUT ""
+
+OUTPUT "Quick Sort Statistics:"
+OUTPUT "Partitions created: "
+OUTPUT partitions
+OUTPUT "Total comparisons: "
+OUTPUT comparisons
+OUTPUT "Total swaps: "
+OUTPUT swaps
+
+OUTPUT "Efficiency Analysis:"
+IF partitions < 5 THEN
+    OUTPUT "Excellent partitioning - nearly balanced"
+ELSE
+    IF partitions < 8 THEN
+        OUTPUT "Good partitioning efficiency"
+    ELSE
+        IF partitions < 12 THEN
+            OUTPUT "Average partitioning efficiency"
+        ELSE
+            OUTPUT "Poor partitioning - unbalanced splits"
+        ENDIF
+    ENDIF
+ENDIF
+
+IF swaps = 0 THEN
+    OUTPUT "Array was already sorted!"
+ELSE
+    IF swaps < Size THEN
+        OUTPUT "Array was nearly sorted"
+    ELSE
+        IF swaps > Size * 2 THEN
+            OUTPUT "Array required significant reordering"
+        ELSE
+            OUTPUT "Array had moderate disorder"
+        ENDIF
+    ENDIF
+ENDIF
+
+OUTPUT "Performance compared to Bubble Sort:"
+DECLARE INTEGER bubbleComparisons := Size * Size / 2
+IF comparisons < bubbleComparisons / 2 THEN
+    OUTPUT "Much faster than Bubble Sort!"
+ELSE
+    IF comparisons < bubbleComparisons THEN
+        OUTPUT "Faster than Bubble Sort"
+    ELSE
+        OUTPUT "Similar performance to Bubble Sort"
+    ENDIF
+ENDIF
+
+OUTPUT "Validation check - array is sorted:"
+DECLARE BOOLEAN sorted := TRUE
+FOR i := 1 TO Size - 1
+    IF Numbers[i] > Numbers[i + 1] THEN
+        sorted := FALSE
+        OUTPUT "ERROR: Array not properly sorted!"
+        i := Size
+    ENDIF
+ENDFOR
+
+IF sorted = TRUE THEN
+    OUTPUT "SUCCESS: Array is correctly sorted!"
+ENDIF
